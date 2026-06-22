@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Schedules - Admin{% endblock %}
+
+{% block nav_items %}
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.students_list') }}"><i class="bi bi-people"></i> Students</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.professors_list') }}"><i class="bi bi-person-badge"></i> Professors</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.subjects_list') }}"><i class="bi bi-book"></i> Subjects</a></li>
+
+<li class="nav-item"><a class="nav-link active" href="{{ url_for('admin.schedules_list') }}"><i class="bi bi-calendar3"></i> Schedules</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.grades_list') }}"><i class="bi bi-card-checklist"></i> Grades</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.reports_list') }}"><i class="bi bi-exclamation-triangle"></i> Reports</a></li>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+
+    <h2 class="mb-0"><i class="bi bi-calendar3"></i> Weekly Schedule</h2>
+
+    <a href="{{ url_for('admin.schedules_add') }}" class="btn btn-primary">
+
+        <i class="bi bi-calendar-plus"></i> Add Schedule
+
+    </a>
+
+</div>
+
+
+
+<!-- Filter by Year Level and Section -->
+
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <form method="GET" class="row g-3 align-items-end">
+
+            <div class="col-md-4">
+
+                <label class="form-label">Year Level</label>
+
+                <select class="form-select" name="year_level" id="yearLevel">
+
+                    {% for yl in year_levels %}
+
+                    <option value="{{ yl }}" {% if selected_year == yl %}selected{% endif %}>{{ yl }}</option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label">Section</label>
+
+                <select class="form-select" name="section" id="sectionSelect">
+
+                    {% for sec in sections[selected_year] %}
+
+                    <option value="{{ sec }}" {% if selected_section == sec %}selected{% endif %}>{{ sec }}</option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> View Schedule</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<div class="card">
+
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+        <span><i class="bi bi-calendar-week"></i> {{ selected_year }} — Section {{ selected_section }}</span>
+
+        <span class="badge bg-light text-primary">{{ schedules|length }} subjects</span>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        {% if schedules %}
+
+            {% include 'partials/weekly_schedule.html' %}
+
+        {% else %}
+
+            <p class="text-center text-muted py-5">No schedules found for this section.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+<!-- Manage individual entries -->
+
+{% if schedules %}
+
+<div class="card mt-4">
+
+    <div class="card-header"><i class="bi bi-list-ul"></i> Schedule Entries</div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-sm table-hover mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Subject</th><th>Professor</th><th>Day</th><th>Time</th><th>Room</th><th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for schedule in schedules %}
+
+                    <tr>
+
+                        <td>{{ schedule.subject.subject_name }}</td>
+
+                        <td>{{ schedule.professor.full_name }}</td>
+
+                        <td>{{ schedule.day }}</td>
+
+                        <td>{{ schedule.start_time }} - {{ schedule.end_time }}</td>
+
+                        <td>{{ schedule.room }}</td>
+
+                        <td>
+
+                            <a href="{{ url_for('admin.schedules_edit', schedule_id=schedule.id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#del{{ schedule.id }}"><i class="bi bi-trash"></i></button>
+
+                        </td>
+
+                    </tr>
+
+                    <div class="modal fade" id="del{{ schedule.id }}" tabindex="-1">
+
+                        <div class="modal-dialog"><div class="modal-content">
+
+                            <div class="modal-header"><h5 class="modal-title">Delete Schedule</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+
+                            <div class="modal-body">Delete <strong>{{ schedule.subject.subject_name }}</strong>?</div>
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                <form method="POST" action="{{ url_for('admin.schedules_delete', schedule_id=schedule.id) }}">
+
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+
+                                </form>
+
+                            </div>
+
+                        </div></div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+    const sectionsMap = {{ sections | tojson }};
+
+    const yearSelect = document.getElementById('yearLevel');
+
+    const sectionSelect = document.getElementById('sectionSelect');
+
+    yearSelect.addEventListener('change', function () {
+
+        const sections = sectionsMap[this.value] || [];
+
+        sectionSelect.innerHTML = '';
+
+        sections.forEach(sec => {
+
+            const opt = document.createElement('option');
+
+            opt.value = sec;
+
+            opt.textContent = sec;
+
+            sectionSelect.appendChild(opt);
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}
+

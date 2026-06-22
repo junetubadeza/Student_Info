@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}My Schedule - Student{% endblock %}
+
+{% block nav_items %}
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('student.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('student.profile') }}"><i class="bi bi-person"></i> Profile</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('student.grades_view') }}"><i class="bi bi-card-checklist"></i> Grades</a></li>
+
+<li class="nav-item"><a class="nav-link active" href="{{ url_for('student.schedule_view') }}"><i class="bi bi-calendar3"></i> Schedule</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('student.change_password') }}"><i class="bi bi-key"></i> Password</a></li>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<h2 class="mb-4"><i class="bi bi-calendar-week"></i> My Class Schedule</h2>
+
+<p class="text-muted">{{ student.year_level }} — Section {{ student.section }}</p>
+
+
+
+<div class="card">
+
+    <div class="card-header bg-primary text-white">
+
+        <i class="bi bi-calendar3"></i> Weekly Timetable
+
+        <span class="badge bg-light text-primary float-end">{{ schedules|length }} subjects</span>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        {% if schedules %}
+
+            {% include 'partials/weekly_schedule.html' %}
+
+        {% else %}
+
+            <p class="text-center text-muted py-5">No schedule found for your section.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
