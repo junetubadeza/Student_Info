@@ -1,0 +1,60 @@
+{# Weekly timetable partial — expects weekly_grid, schedule_days, time_slots #}
+<div class="weekly-schedule-wrapper">
+    <div class="table-responsive">
+        <table class="table table-bordered weekly-schedule mb-0">
+            <thead>
+                <tr>
+                    <th class="time-col">Time</th>
+                    {% for day in schedule_days %}
+                    <th>{{ day }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for start, end in time_slots %}
+                <tr>
+                    <td class="time-col">
+                        <span class="time-label">{{ start }}</span>
+                        <span class="time-sep">–</span>
+                        <span class="time-label">{{ end }}</span>
+                    </td>
+                    {% for day in schedule_days %}
+                    <td class="schedule-cell">
+                        {% set cell = weekly_grid[day][(start, end)] %}
+                        {% if cell %}
+                            {% if cell is mapping %}
+                            <div class="class-block">
+                                <div class="class-subject">{{ cell.subject }}</div>
+                                <div class="class-code text-muted">{{ cell.subject_code }}</div>
+                                <div class="class-prof"><i class="bi bi-person"></i> {{ cell.professor }}</div>
+                                <div class="class-meta">
+                                    <span><i class="bi bi-clock"></i> {{ cell.time_label }}</span>
+                                    <span><i class="bi bi-geo-alt"></i> {{ cell.room }}</span>
+                                </div>
+                                {% if show_section|default(false) %}
+                                <div class="class-section badge bg-primary">{{ cell.year_level }} {{ cell.section }}</div>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                                {% for item in cell %}
+                                <div class="class-block class-block-stacked">
+                                    <div class="class-subject">{{ item.subject }}</div>
+                                    <div class="class-prof"><i class="bi bi-person"></i> {{ item.professor }}</div>
+                                    <div class="class-meta">
+                                        <span>{{ item.year_level }} {{ item.section }}</span>
+                                        <span><i class="bi bi-geo-alt"></i> {{ item.room }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted schedule-empty">—</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

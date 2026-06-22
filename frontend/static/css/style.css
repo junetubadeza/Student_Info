@@ -1,0 +1,198 @@
+/* Student Information System - Custom Styles */
+/* Blue & White theme */
+
+:root {
+    --sis-primary: #0d6efd;
+    --sis-primary-dark: #0a58ca;
+    --sis-light: #f8f9fa;
+}
+
+body {
+    background-color: var(--sis-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Login page */
+.login-page {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 50%, #084298 100%);
+}
+
+.login-page .card {
+    border-radius: 12px;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.nav-link.active {
+    font-weight: 600;
+}
+
+/* Cards */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* Tables */
+.table thead th {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--sis-primary);
+    border-color: var(--sis-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--sis-primary-dark);
+    border-color: var(--sis-primary-dark);
+}
+
+/* Dashboard stat cards */
+.card.border-primary {
+    transition: transform 0.2s;
+}
+
+.card.border-primary:hover {
+    transform: translateY(-2px);
+}
+
+/* Pagination */
+.page-item.active .page-link {
+    background-color: var(--sis-primary);
+    border-color: var(--sis-primary);
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid #dee2e6;
+}
+
+/* Weekly Schedule Timetable */
+.weekly-schedule-wrapper {
+    overflow-x: auto;
+}
+
+.weekly-schedule {
+    table-layout: fixed;
+    min-width: 700px;
+}
+
+.weekly-schedule thead th {
+    background-color: var(--sis-primary);
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+}
+
+.weekly-schedule .time-col {
+    width: 90px;
+    background-color: #e9ecef;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
+
+.weekly-schedule .time-sep {
+    display: block;
+    color: #6c757d;
+    font-size: 0.7rem;
+}
+
+.weekly-schedule .schedule-cell {
+    vertical-align: top;
+    padding: 0.35rem;
+    min-height: 80px;
+    background-color: #fff;
+}
+
+.weekly-schedule tbody tr:nth-child(even) .schedule-cell {
+    background-color: #fafbfc;
+}
+
+.class-block {
+    background: linear-gradient(135deg, #e7f1ff 0%, #f0f6ff 100%);
+    border-left: 3px solid var(--sis-primary);
+    border-radius: 6px;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+}
+
+.class-block-stacked {
+    margin-bottom: 0.35rem;
+}
+
+.class-block-stacked:last-child {
+    margin-bottom: 0;
+}
+
+.class-subject {
+    font-weight: 700;
+    color: var(--sis-primary-dark);
+    font-size: 0.85rem;
+}
+
+.class-code {
+    font-size: 0.72rem;
+}
+
+.class-prof {
+    margin-top: 0.25rem;
+    color: #495057;
+}
+
+.class-meta {
+    margin-top: 0.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    color: #6c757d;
+}
+
+.class-section {
+    margin-top: 0.3rem;
+    font-size: 0.68rem;
+}
+
+.schedule-empty {
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.85rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+}

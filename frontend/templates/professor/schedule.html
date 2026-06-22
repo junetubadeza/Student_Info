@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}My Schedule - Professor{% endblock %}
+
+{% block nav_items %}
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('professor.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('professor.students_list') }}"><i class="bi bi-people"></i> Students</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('professor.subjects_list') }}"><i class="bi bi-book"></i> Subjects</a></li>
+
+<li class="nav-item"><a class="nav-link active" href="{{ url_for('professor.schedule_view') }}"><i class="bi bi-calendar3"></i> Schedule</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('professor.grades_list') }}"><i class="bi bi-card-checklist"></i> Grades</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ url_for('professor.disciplinary_report') }}"><i class="bi bi-exclamation-triangle"></i> Report</a></li>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<h2 class="mb-4"><i class="bi bi-calendar-week"></i> Teaching Schedule</h2>
+
+
+
+<div class="card">
+
+    <div class="card-header bg-primary text-white">
+
+        <i class="bi bi-calendar3"></i> Weekly Timetable
+
+        <span class="badge bg-light text-primary float-end">{{ schedules|length }} classes</span>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        {% if schedules %}
+
+            {% set show_section = true %}
+
+            {% include 'partials/weekly_schedule.html' %}
+
+        {% else %}
+
+            <p class="text-center text-muted py-5">No schedule found.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+

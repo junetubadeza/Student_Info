@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if schedule else 'Add' }} Schedule - Admin{% endblock %}
+{% block nav_items %}
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.students_list') }}"><i class="bi bi-people"></i> Students</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.professors_list') }}"><i class="bi bi-person-badge"></i> Professors</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.subjects_list') }}"><i class="bi bi-book"></i> Subjects</a></li>
+<li class="nav-item"><a class="nav-link active" href="{{ url_for('admin.schedules_list') }}"><i class="bi bi-calendar3"></i> Schedules</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.grades_list') }}"><i class="bi bi-card-checklist"></i> Grades</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.reports_list') }}"><i class="bi bi-exclamation-triangle"></i> Reports</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-plus"></i> {{ 'Edit' if schedule else 'Add' }} Schedule</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Subject *</label>
+                            <select class="form-select" name="subject_id" required>
+                                {% for s in subjects %}
+                                <option value="{{ s.id }}" {% if schedule and schedule.subject_id == s.id %}selected{% endif %}>
+                                    {{ s.subject_code }} - {{ s.subject_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Professor *</label>
+                            <select class="form-select" name="professor_id" required>
+                                {% for p in professors %}
+                                <option value="{{ p.id }}" {% if schedule and schedule.professor_id == p.id %}selected{% endif %}>
+                                    {{ p.full_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Year Level *</label>
+                            <select class="form-select" name="year_level" id="yearLevel" required>
+                                {% for yl in year_levels %}
+                                <option value="{{ yl }}" {% if schedule and schedule.year_level == yl %}selected{% endif %}>{{ yl }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Section *</label>
+                            <select class="form-select" name="section" id="sectionSelect" required>
+                                {% if schedule %}
+                                    {% for sec in sections[schedule.year_level] %}
+                                    <option value="{{ sec }}" {% if schedule.section == sec %}selected{% endif %}>{{ sec }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Room *</label>
+                            <input type="text" class="form-control" name="room" required
+                                   value="{{ schedule.room if schedule else '' }}" placeholder="e.g. Room 101">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Day *</label>
+                            <select class="form-select" name="day" required>
+                                {% for day in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] %}
+                                <option value="{{ day }}" {% if schedule and schedule.day == day %}selected{% endif %}>{{ day }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Start Time *</label>
+                            <input type="time" class="form-control" name="start_time" required
+                                   value="{{ schedule.start_time if schedule else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">End Time *</label>
+                            <input type="time" class="form-control" name="end_time" required
+                                   value="{{ schedule.end_time if schedule else '' }}">
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+                        <a href="{{ url_for('admin.schedules_list') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const sectionsMap = {{ sections | tojson }};
+    const yearSelect = document.getElementById('yearLevel');
+    const sectionSelect = document.getElementById('sectionSelect');
+    yearSelect.addEventListener('change', function() {
+        const sections = sectionsMap[this.value] || [];
+        sectionSelect.innerHTML = '';
+        sections.forEach(sec => {
+            const opt = document.createElement('option');
+            opt.value = sec; opt.textContent = sec;
+            sectionSelect.appendChild(opt);
+        });
+    });
+    if (!sectionSelect.options.length) yearSelect.dispatchEvent(new Event('change'));
+</script>
+{% endblock %}

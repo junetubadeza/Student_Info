@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if professor else 'Add' }} Professor - Admin{% endblock %}
+{% block nav_items %}
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.students_list') }}"><i class="bi bi-people"></i> Students</a></li>
+<li class="nav-item"><a class="nav-link active" href="{{ url_for('admin.professors_list') }}"><i class="bi bi-person-badge"></i> Professors</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.subjects_list') }}"><i class="bi bi-book"></i> Subjects</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.schedules_list') }}"><i class="bi bi-calendar3"></i> Schedules</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.grades_list') }}"><i class="bi bi-card-checklist"></i> Grades</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.reports_list') }}"><i class="bi bi-exclamation-triangle"></i> Reports</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> {{ 'Edit' if professor else 'Add' }} Professor</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% if not professor %}
+                    <h6 class="text-muted mb-3">Account Information</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Username *</label>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Password *</label>
+                            <input type="password" class="form-control" name="password" required minlength="6">
+                        </div>
+                    </div>
+                    <hr>
+                    {% else %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ professor.user.email }}">
+                        </div>
+                    </div>
+                    <hr>
+                    {% endif %}
+
+                    <h6 class="text-muted mb-3">Professor Information</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Employee Number *</label>
+                            <input type="text" class="form-control" name="employee_number" required
+                                   value="{{ professor.employee_number if professor else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-control" name="first_name" required
+                                   value="{{ professor.first_name if professor else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" name="last_name" required
+                                   value="{{ professor.last_name if professor else '' }}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Department *</label>
+                            <input type="text" class="form-control" name="department" required
+                                   value="{{ professor.department if professor else 'Computer Science' }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> {{ 'Update' if professor else 'Add' }} Professor
+                        </button>
+                        <a href="{{ url_for('admin.professors_list') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
