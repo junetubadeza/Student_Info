@@ -1,5 +1,10 @@
 # Student Information System (SIS)
-
+CREATED BY:
+jUNE tUBADEZA
+JOHN LESTER BLANZA
+CZEAHAMFORD HALL
+MC KENNETH TACIS
+JOSEPH ALLEN
 A simple but modern **Student Information System** built with Flask for a college final project. It supports CRUD operations, role-based authentication, class schedules, grade management, and data export.
 
 ## Features
