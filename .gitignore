@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask / app artifacts
+instance/
+*.log
+
+# SQLite database (created at runtime)
+database/school.db
+
+# Virtual envs
+.venv/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
